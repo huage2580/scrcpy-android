@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="100dp"
         android:orientation="vertical">
 
 
@@ -24,10 +23,14 @@
 
         <EditText
             android:id="@+id/editText_server_host"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="none" />
+            android:maxLength="15"
+            android:ems="7"
+            android:inputType="text"
+            android:minHeight="48dp"
+            tools:ignore="LabelFor,SpeakableTextPresentCheck"
+            android:importantForAutofill="no" />
 
 
         <TextView
@@ -41,7 +44,9 @@
             android:id="@+id/spinner_video_resolution"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/options_resolution_keys" />
+            android:entries="@array/options_resolution_keys"
+            android:minHeight="48dp"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView
             android:layout_width="match_parent"
@@ -54,7 +59,25 @@
             android:id="@+id/spinner_video_bitrate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/options_bitrate_keys" />
+            android:entries="@array/options_bitrate_keys"
+            android:minHeight="48dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <Switch
+            android:id="@+id/switch0"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="@string/switch0"
+            android:textSize="15sp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -67,7 +90,7 @@
         <Switch
             android:id="@+id/switch1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_weight="1"
             android:text="@string/switch1"
             android:textSize="15sp" />

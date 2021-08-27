@@ -1,16 +1,16 @@
 <resources>
     <string name="app_name">scrcpy</string>
 
-    <string name="label_server_ip">Server IP</string>
-
+    <string name="label_server_ip">Remote Device IP address</string>
     <string name="label_video_resolution">Resolution</string>
     <string name="label_video_bitrate">Bitrate</string>
+    <string name="label_x">x</string>
     <string name="action_start">Start</string>
     <string name="appswitch_button">=</string>
     <string name="home_button">o</string>
     <string name="back_button">v</string>
-
-    <string name="switch1">Nav Bar  (check this if target device does not have on-screen nav bar)</string>
+    <string name="switch0">No Control  (check this if remote device control is not required)</string>
+    <string name="switch1">Nav Bar  (check this if remote device does not have on-screen nav bar)</string>
 
 
     <string-array name="options_resolution_keys">

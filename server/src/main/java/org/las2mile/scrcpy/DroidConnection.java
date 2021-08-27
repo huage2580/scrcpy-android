@@ -63,7 +63,6 @@ public final class DroidConnection implements Closeable {
             throw new EOFException("Event controller socket closed");
         }
 
-
         final int[] array = new int[buf.length / 4];
         for (int i = 0; i < array.length; i++)
             array[i] = (((int) (buf[i * 4]) << 24) & 0xFF000000) |

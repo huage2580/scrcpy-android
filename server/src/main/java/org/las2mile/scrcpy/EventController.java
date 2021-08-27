@@ -34,7 +34,6 @@ public class EventController {
         MotionEvent.PointerProperties props = pointerProperties[0];
         props.id = 0;
         props.toolType = MotionEvent.TOOL_TYPE_FINGER;
-
         MotionEvent.PointerCoords coords = pointerCoords[0];
         coords.orientation = 0;
         coords.pressure = 1;
@@ -67,7 +66,7 @@ public class EventController {
                         proximity = true;           // Proximity event
                     } else if (buffer[0] == 29) {
                         proximity = false;
-                    } else {
+                    }else {
                         injectKeycode(buffer[0]);
                     }
                 } else {

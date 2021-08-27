@@ -3,7 +3,13 @@ package org.las2mile.scrcpy;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Surface;
 
@@ -14,6 +20,7 @@ import org.las2mile.scrcpy.model.VideoPacket;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -32,7 +39,8 @@ public class Scrcpy extends Service {
     private boolean first_time = true;
     private AtomicBoolean LetServceRunning = new AtomicBoolean(true);
     private ServiceCallbacks serviceCallbacks;
-
+    private int[] remote_dev_resolution = new int[2];
+    private boolean socket_status = false;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -42,7 +50,6 @@ public class Scrcpy extends Service {
     public void setServiceCallbacks(ServiceCallbacks callbacks) {
         serviceCallbacks = callbacks;
     }
-
 
     public void setParms(Surface NewSurface, int NewWidth, int NewHeight) {
         this.screenWidth = NewWidth;
@@ -71,7 +78,6 @@ public class Scrcpy extends Service {
 
     public void pause() {
         videoDecoder.stop();
-
     }
 
     public void resume() {
@@ -100,6 +106,14 @@ public class Scrcpy extends Service {
         return true;
     }
 
+    public int[] get_remote_device_resolution(){
+        return remote_dev_resolution;
+    }
+
+    public boolean check_socket_connection(){
+        return socket_status;
+    }
+
     public void sendKeyevent(int keycode) {
         int[] buf = new int[]{keycode};
 
@@ -124,12 +138,27 @@ public class Scrcpy extends Service {
         int attempts = 50;
         while (attempts != 0) {
             try {
+//                Log.e("Scrcpy","Connecting to " + serverAdr);
                 socket = new Socket(serverAdr, 7007);
                 dataInputStream = new DataInputStream(socket.getInputStream());
                 dataOutputStream = new DataOutputStream(socket.getOutputStream());
-
                 byte[] packetSize;
                 attempts = 0;
+                byte[] buf = new byte[16];
+                dataInputStream.read(buf, 0,16);
+                for(int i =0; i<remote_dev_resolution.length; i++) {
+                    remote_dev_resolution[i] = (((int) (buf[i * 4]) << 24) & 0xFF000000) |
+                            (((int) (buf[i * 4 + 1]) << 16) & 0xFF0000) |
+                            (((int) (buf[i * 4 + 2]) << 8) & 0xFF00) |
+                            ((int) (buf[i * 4 + 3]) & 0xFF);
+                }
+                if (remote_dev_resolution[0] > remote_dev_resolution[1]){first_time = false;
+                int i = remote_dev_resolution[0];
+                remote_dev_resolution[0] = remote_dev_resolution[1];
+                remote_dev_resolution[1] = i;
+                }
+                socket_status = true;
+//                    Log.e("Remote device res", String.valueOf(remote_dev_resolution[0]+" x "+remote_dev_resolution[1]));
                 while (LetServceRunning.get()) {
                     try {
                         if (event != null) {
@@ -138,10 +167,8 @@ public class Scrcpy extends Service {
                         }
 
                         if (dataInputStream.available() > 0) {
-
                             packetSize = new byte[4];
                             dataInputStream.readFully(packetSize, 0, 4);
-
                             int size = ByteUtils.bytesToInt(packetSize);
                             byte[] packet = new byte[size];
                             dataInputStream.readFully(packet, 0, size);
@@ -162,33 +189,37 @@ public class Scrcpy extends Service {
                                                 } catch (InterruptedException e) {
                                                     e.printStackTrace();
                                                 }
-
                                             }
 
                                         }
                                     }
                                     updateAvailable.set(false);
-                                    first_time = false;
+ //                                   first_time = false;
                                     videoDecoder.configure(surface, screenWidth, screenHeight, streamSettings.sps, streamSettings.pps);
                                 } else if (videoPacket.flag == VideoPacket.Flag.END) {
                                     // need close stream
                                 } else {
                                     videoDecoder.decodeSample(data, 0, data.length, 0, videoPacket.flag.getFlag());
-
                                 }
+                                first_time = false;
                             }
 
                         }
 
 
                     } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
 
-
             } catch (IOException e) {
+              //  e.printStackTrace();
+                attempts = attempts - 1;
+                if (attempts == 0){
+                    socket_status = false;
+                    return;
+                }
                 try {
-                    attempts = attempts - 1;
                     Thread.sleep(100);
                 } catch (InterruptedException ignore) {
                 }
@@ -204,7 +235,6 @@ public class Scrcpy extends Service {
 
             }
 
-
         }
 
     }
@@ -218,4 +248,6 @@ public class Scrcpy extends Service {
             return Scrcpy.this;
         }
     }
+    
+
 }

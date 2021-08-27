@@ -26,7 +26,6 @@ public final class Server {
                 // this is expected on close
                 Ln.d("Screen streaming stopped");
 
-
             }
         }
     }
@@ -73,7 +72,6 @@ public final class Server {
         // use "adb forward" instead of "adb tunnel"? (so the server must listen)
         boolean tunnelForward = Boolean.parseBoolean(args[3]);
         options.setTunnelForward(tunnelForward);
-
         return options;
     }
 

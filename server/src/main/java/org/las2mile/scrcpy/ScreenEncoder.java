@@ -97,6 +97,16 @@ public class ScreenEncoder implements Device.RotationListener {
     }
 
     public void streamScreen(Device device, OutputStream outputStream) throws IOException {
+        int[] buf = new int[]{device.getScreenInfo().getDeviceSize().getWidth(), device.getScreenInfo().getDeviceSize().getHeight()};
+        final byte[] array = new byte[buf.length*4];   // https://stackoverflow.com/questions/2183240/java-integer-to-byte-array
+        for (int j = 0; j < buf.length; j++) {
+            final int c = buf[j];
+            array[j * 4] = (byte) ((c & 0xFF000000) >> 24);
+            array[j * 4 + 1] = (byte) ((c & 0xFF0000) >> 16);
+            array[j * 4 + 2] = (byte) ((c & 0xFF00) >> 8);
+            array[j * 4 + 3] = (byte) (c & 0xFF);
+        }
+        outputStream.write(array,0, array.length);   // Sending device resolution
         MediaFormat format = createFormat(bitRate, frameRate, iFrameInterval);
         device.setRotationListener(this);
         boolean alive;
