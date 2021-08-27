@@ -48,7 +48,7 @@
 
 - scrcpy-android part is licensed under the GPLv3.
 
-- The server part is licensed under the GPLv3 Apache License 2.0.
+- The server part is licensed under the Apache License 2.0.
 
 - The Adblib library used is licensed under the BSD-3-Clause License. 
 
