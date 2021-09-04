@@ -53,8 +53,7 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
     private static boolean serviceBound = false;
     private static boolean nav = false;
     SensorManager sensorManager;
-    @SuppressLint("StaticFieldLeak")
-    private static SendCommands sendCommands;
+    private SendCommands sendCommands;
     private int videoBitrate;
     private String local_ip;
     private Context context;
@@ -91,11 +90,9 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
                        scrcpy.StopService();
                        unbindService(serviceConnection);
                        serviceBound = false;
-                       setContentView(R.layout.activity_main);
-                       get_saved_preferences();
+                       scrcpy_main();
                    }
                    Toast.makeText(context, "Connection Timed out", Toast.LENGTH_SHORT).show();
-//                   Toast.makeText(context, "Press back button twice to exit", Toast.LENGTH_SHORT).show();
                }else{
                int[] rem_res = scrcpy.get_remote_device_resolution();
                remote_device_height = rem_res[1];
@@ -121,36 +118,10 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (first_time) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            setContentView(R.layout.activity_main);
-            final Button startButton = findViewById(R.id.button_start);
-            AssetManager assetManager = getAssets();
-            try {
-                InputStream input_Stream = assetManager.open("scrcpy-server.jar");
-                byte[] buffer = new byte[input_Stream.available()];
-                input_Stream.read(buffer);
-                fileBase64 = Base64.encode(buffer, 2);
-            } catch (IOException e) {
-                Log.e("Asset Manager", e.getMessage());
-            }
-            sendCommands = new SendCommands();
-            startButton.setOnClickListener(v -> {
-                local_ip = wifiIpAddress();
-                getAttributes();
-                if (!serverAdr.isEmpty()) {
-                        if (sendCommands.SendAdbCommands(context, fileBase64, serverAdr, local_ip, videoBitrate, Math.max(screenHeight, screenWidth)) == 0) {
-                                start_screen_copy_magic();
-                        } else {
-                            Toast.makeText(context, "Network OR ADB connection failed", Toast.LENGTH_SHORT).show();
-                        }
-                } else {
-                    Toast.makeText(context, "Server Address Empty", Toast.LENGTH_SHORT).show();
-                }
-            });
-            get_saved_preferences();
+            scrcpy_main();
         } else {
             this.context = this;
-                start_screen_copy_magic();
+            start_screen_copy_magic();
         }
         sensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
         Sensor proximity;
@@ -158,6 +129,40 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
         sensorManager.registerListener(this, proximity, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
+
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    public void scrcpy_main(){
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setContentView(R.layout.activity_main);
+        final Button startButton = findViewById(R.id.button_start);
+        AssetManager assetManager = getAssets();
+        try {
+            InputStream input_Stream = assetManager.open("scrcpy-server.jar");
+            byte[] buffer = new byte[input_Stream.available()];
+            input_Stream.read(buffer);
+            fileBase64 = Base64.encode(buffer, 2);
+        } catch (IOException e) {
+            Log.e("Asset Manager", e.getMessage());
+        }
+        sendCommands = new SendCommands();
+
+        startButton.setOnClickListener(v -> {
+            local_ip = wifiIpAddress();
+            getAttributes();
+            if (!serverAdr.isEmpty()) {
+                if (sendCommands.SendAdbCommands(context, fileBase64, serverAdr, local_ip, videoBitrate, Math.max(screenHeight, screenWidth)) == 0) {
+                    start_screen_copy_magic();
+                } else {
+                    Toast.makeText(context, "Network OR ADB connection failed", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(context, "Server Address Empty", Toast.LENGTH_SHORT).show();
+            }
+        });
+        get_saved_preferences();
+    }
+
 
     public void get_saved_preferences(){
         this.context = this;

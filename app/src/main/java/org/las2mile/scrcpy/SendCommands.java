@@ -1,15 +1,13 @@
 package org.las2mile.scrcpy;
 
+
+import static android.org.apache.commons.codec.binary.Base64.encodeBase64String;
 import android.content.Context;
 import android.util.Log;
-
-import org.las2mile.scrcpy.adblib.AdbBase64;
-import org.las2mile.scrcpy.adblib.AdbConnection;
-import org.las2mile.scrcpy.adblib.AdbCrypto;
-import org.las2mile.scrcpy.adblib.AdbStream;
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import com.tananaev.adblib.AdbBase64;
+import com.tananaev.adblib.AdbConnection;
+import com.tananaev.adblib.AdbCrypto;
+import com.tananaev.adblib.AdbStream;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
@@ -18,10 +16,6 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-
-import static android.org.apache.commons.codec.binary.Base64.encodeBase64String;
-
-//Uses some code from https://github.com/Jolanrensen/ADBPlugin
 
 
 public class SendCommands {
@@ -49,9 +43,7 @@ public class SendCommands {
 
         AdbCrypto c = null;
         try {
-            FileInputStream privIn = context.openFileInput("priv.key");
-            FileInputStream pubIn = context.openFileInput("pub.key");
-            c = AdbCrypto.loadAdbKeyPair(getBase64Impl(), privIn, pubIn);
+              c = AdbCrypto.loadAdbKeyPair(getBase64Impl(), context.getFileStreamPath("priv.key"), context.getFileStreamPath("pub.key"));
         } catch (IOException | InvalidKeySpecException | NoSuchAlgorithmException | NullPointerException e) {
             // Failed to read from file
             c = null;
@@ -61,12 +53,8 @@ public class SendCommands {
         if (c == null) {
             // We couldn't load a key, so let's generate a new one
             c = AdbCrypto.generateAdbKeyPair(getBase64Impl());
-
             // Save it
-            FileOutputStream privOut = context.openFileOutput("priv.key", Context.MODE_PRIVATE);
-            FileOutputStream pubOut = context.openFileOutput("pub.key", Context.MODE_PRIVATE);
-
-            c.saveAdbKeyPair(privOut, pubOut);
+            c.saveAdbKeyPair(context.getFileStreamPath("priv.key"), context.getFileStreamPath("pub.key"));
             //Generated new keypair
         } else {
             //Loaded existing keypair
@@ -130,7 +118,7 @@ public class SendCommands {
 
         try {
             sock = new Socket(ip, 5555);
-//            Log.e("ADB","Socket connection successful");
+            Log.e("scrcpy"," ADB socket connection successful");
         } catch (UnknownHostException e) {
             status = 2;
             throw new UnknownHostException(ip + " is no valid ip address");
