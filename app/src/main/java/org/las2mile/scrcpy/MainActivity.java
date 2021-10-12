@@ -196,8 +196,11 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
             final Display display = getWindowManager().getDefaultDisplay();
             display.getRealMetrics(metrics);
         }
-        float this_dev_height = metrics.heightPixels;
-        float this_dev_width = metrics.widthPixels;
+//        float this_dev_height = metrics.heightPixels;
+//        float this_dev_width = metrics.widthPixels;
+
+        float this_dev_height = linearLayout.getHeight();
+        float this_dev_width = linearLayout.getWidth();
         if (nav && !no_control){
             if (landscape){
                 this_dev_width = this_dev_width - 96;
@@ -209,16 +212,23 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
 
         if (!landscape) {                                                            //Portrait
             float this_device_aspect_ratio = this_dev_height/this_dev_width;
+            Log.d("fuck", "set_display_nd_touch: "+this_device_aspect_ratio);
             if (remote_device_aspect_ratio > this_device_aspect_ratio) {
-                linearLayout.setPadding((int) (((remote_device_aspect_ratio - this_device_aspect_ratio)*this_dev_width)/2),0,(int) (((remote_device_aspect_ratio - this_device_aspect_ratio)*this_dev_width)/2),0);
+                //TODO
+                float wantWidth = this_dev_height / remote_device_aspect_ratio;
+                int padding = (int)(this_dev_width-wantWidth)/2;
+                linearLayout.setPadding(padding,0,padding,0);
             } else if (remote_device_aspect_ratio < this_device_aspect_ratio) {
                 linearLayout.setPadding(0,(int) (((this_device_aspect_ratio - remote_device_aspect_ratio)*this_dev_width)),0,0);
             }
 
         }else{                                                                        //Landscape
             float this_device_aspect_ratio = this_dev_width/this_dev_height;
+            Log.d("fuck", "set_display_nd_touch_land: "+this_device_aspect_ratio);
             if (remote_device_aspect_ratio > this_device_aspect_ratio) {
-                linearLayout.setPadding(0,(int) (((remote_device_aspect_ratio - this_device_aspect_ratio)*this_dev_height)/2),0,(int) (((remote_device_aspect_ratio - this_device_aspect_ratio)*this_dev_height)/2));
+                float wantHeight = this_dev_width / remote_device_aspect_ratio;
+                int padding = (int)(this_dev_height-wantHeight)/2;
+                linearLayout.setPadding(0,padding,0,padding);
             } else if (remote_device_aspect_ratio < this_device_aspect_ratio) {
                 linearLayout.setPadding(((int) (((this_device_aspect_ratio - remote_device_aspect_ratio)*this_dev_height))/2),0,((int) (((this_device_aspect_ratio - remote_device_aspect_ratio)*this_dev_height))/2),0);
             }

@@ -1,118 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <LinearLayout 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:orientation="vertical">
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
 
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:text="@string/label_server_ip"
-            android:textAppearance="@android:style/TextAppearance" />
-
-        <EditText
-            android:id="@+id/editText_server_host"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLength="15"
-            android:ems="7"
-            android:inputType="text"
-            android:minHeight="48dp"
-            tools:ignore="LabelFor,SpeakableTextPresentCheck"
-            android:importantForAutofill="no" />
+            android:layout_marginTop="100dp"
+            android:orientation="vertical">
 
 
-        <TextView
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:text="@string/label_server_ip"
+                android:textAppearance="@android:style/TextAppearance" />
+
+            <EditText
+                android:id="@+id/editText_server_host"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLength="15"
+                android:ems="7"
+                android:inputType="text"
+                android:minHeight="48dp"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck"
+                android:importantForAutofill="no" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/label_video_resolution"
+                android:textAppearance="@android:style/TextAppearance" />
+
+            <Spinner
+                android:id="@+id/spinner_video_resolution"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/options_resolution_keys"
+                android:minHeight="48dp"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/label_video_bitrate"
+                android:textAppearance="@android:style/TextAppearance" />
+
+            <Spinner
+                android:id="@+id/spinner_video_bitrate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/options_bitrate_keys"
+                android:minHeight="48dp" />
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/label_video_resolution"
-            android:textAppearance="@android:style/TextAppearance" />
+            android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/spinner_video_resolution"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/options_resolution_keys"
-            android:minHeight="48dp"
-            tools:ignore="DuplicateSpeakableTextCheck" />
+            <Switch
+                android:id="@+id/switch0"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="@string/switch0"
+                android:textSize="15sp" />
 
-        <TextView
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/label_video_bitrate"
-            android:textAppearance="@android:style/TextAppearance" />
+            android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/spinner_video_bitrate"
+
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="@string/switch1"
+                android:textSize="15sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/options_bitrate_keys"
-            android:minHeight="48dp" />
-    </LinearLayout>
+            android:layout_marginTop="40dp"
+            android:orientation="horizontal">
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
-
-        <Switch
-            android:id="@+id/switch0"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:text="@string/switch0"
-            android:textSize="15sp" />
+            <Button
+                android:id="@+id/button_start"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/action_start"
+                android:textSize="30sp" />
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
-
-
-        <Switch
-            android:id="@+id/switch1"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:text="@string/switch1"
-            android:textSize="15sp" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:orientation="horizontal">
-
-
-        <Button
-            android:id="@+id/button_start"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/action_start"
-            android:textSize="30sp" />
-    </LinearLayout>
-
-</LinearLayout>
-
+</ScrollView>
