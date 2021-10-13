@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout 
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
@@ -14,15 +14,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
             android:orientation="vertical">
+
+            <TextView
+                android:padding="20dp"
+                android:text="要使用scrcpy-lite,要开启手机的无线调试\nadb命令:adb tcpip 5555"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="20dp"
-                android:text="@string/label_server_ip"
+                android:text="手机的IP地址,例如192.168.0.73"
                 android:textAppearance="@android:style/TextAppearance" />
 
             <EditText
@@ -38,17 +43,18 @@
 
 
             <TextView
+                android:textSize="16sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/label_video_resolution"
+                android:text="传输分辨率(不是手机分辨率，只影响清晰度随便选,同比例优先)"
                 android:textAppearance="@android:style/TextAppearance" />
 
             <Spinner
                 android:id="@+id/spinner_video_resolution"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:entries="@array/options_resolution_keys"
+                android:entries="@array/options_resolution_values"
                 android:minHeight="48dp"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -56,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/label_video_bitrate"
+                android:text="带宽码率 (影响清晰度和延迟)"
                 android:textAppearance="@android:style/TextAppearance" />
 
             <Spinner
@@ -114,7 +120,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/action_start"
+                android:text="内置模式"
+                android:textSize="30sp" />
+            <Button
+                android:id="@+id/button_start_float"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="悬浮窗模式"
                 android:textSize="30sp" />
         </LinearLayout>
 

@@ -12,9 +12,11 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -133,9 +135,10 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
 
     @SuppressLint("SourceLockedOrientationActivity")
     public void scrcpy_main(){
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
         final Button startButton = findViewById(R.id.button_start);
+        final Button floatButton = findViewById(R.id.button_start_float);
         AssetManager assetManager = getAssets();
         try {
             InputStream input_Stream = assetManager.open("scrcpy-server.jar");
@@ -160,7 +163,30 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
                 Toast.makeText(context, "Server Address Empty", Toast.LENGTH_SHORT).show();
             }
         });
+
+        floatButton.setOnClickListener(v->{
+            getAttributes();
+            showDisplayWindow();
+        });
         get_saved_preferences();
+    }
+
+    private void showDisplayWindow() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                //启动Activity让用户授权
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                startActivity(intent);
+                return;
+            }
+        }
+        Intent it = new Intent(this,FloatService.class);
+        it.putExtra("ip",serverAdr);
+        it.putExtra("w",screenWidth);
+        it.putExtra("h",screenHeight);
+        it.putExtra("b",videoBitrate);
+        startService(it);
+        finish();
     }
 
 
@@ -172,7 +198,7 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
         editTextServerHost.setText(context.getSharedPreferences(PREFERENCE_KEY, 0).getString("Server Address", ""));
         aSwitch0.setChecked(context.getSharedPreferences(PREFERENCE_KEY, 0).getBoolean("No Control", false));
         aSwitch1.setChecked(context.getSharedPreferences(PREFERENCE_KEY, 0).getBoolean("Nav Switch", false));
-        setSpinner(R.array.options_resolution_keys, R.id.spinner_video_resolution, PREFERENCE_SPINNER_RESOLUTION);
+        setSpinner(R.array.options_resolution_values, R.id.spinner_video_resolution, PREFERENCE_SPINNER_RESOLUTION);
         setSpinner(R.array.options_bitrate_keys, R.id.spinner_video_bitrate, PREFERENCE_SPINNER_BITRATE);
         if(aSwitch0.isChecked()){
             aSwitch1.setVisibility(View.GONE);
@@ -212,7 +238,7 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
 
         if (!landscape) {                                                            //Portrait
             float this_device_aspect_ratio = this_dev_height/this_dev_width;
-            Log.d("fuck", "set_display_nd_touch: "+this_device_aspect_ratio);
+//            Log.d("fuck", "set_display_nd_touch: "+this_device_aspect_ratio);
             if (remote_device_aspect_ratio > this_device_aspect_ratio) {
                 //TODO
                 float wantWidth = this_dev_height / remote_device_aspect_ratio;
@@ -224,7 +250,7 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
 
         }else{                                                                        //Landscape
             float this_device_aspect_ratio = this_dev_width/this_dev_height;
-            Log.d("fuck", "set_display_nd_touch_land: "+this_device_aspect_ratio);
+//            Log.d("fuck", "set_display_nd_touch_land: "+this_device_aspect_ratio);
             if (remote_device_aspect_ratio > this_device_aspect_ratio) {
                 float wantHeight = this_dev_width / remote_device_aspect_ratio;
                 int padding = (int)(this_dev_height-wantHeight)/2;
@@ -285,7 +311,7 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
         context.getSharedPreferences(PREFERENCE_KEY, 0).edit().putBoolean("No Control", no_control).apply();
         context.getSharedPreferences(PREFERENCE_KEY, 0).edit().putBoolean("Nav Switch", nav).apply();
 
-        final String[] videoResolutions = getResources().getStringArray(R.array.options_resolution_values)[videoResolutionSpinner.getSelectedItemPosition()].split(",");
+        final String[] videoResolutions = getResources().getStringArray(R.array.options_resolution_values)[videoResolutionSpinner.getSelectedItemPosition()].split("x");
             screenHeight = Integer.parseInt(videoResolutions[0]);
             screenWidth = Integer.parseInt(videoResolutions[1]);
             videoBitrate = getResources().getIntArray(R.array.options_bitrate_values)[videoBitrateSpinner.getSelectedItemPosition()];

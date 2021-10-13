@@ -42,6 +42,8 @@ public class Scrcpy extends Service {
     private int[] remote_dev_resolution = new int[2];
     private boolean socket_status = false;
 
+
+
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
@@ -92,8 +94,12 @@ public class Scrcpy extends Service {
 
 
     public boolean touchevent(MotionEvent touch_event, int displayW, int displayH) {
+        float remoteW = Math.min(remote_dev_resolution[0],remote_dev_resolution[1]);
+        float remoteH = Math.max(remote_dev_resolution[0],remote_dev_resolution[1]);
+        float realH = Math.min(remoteH,screenHeight);
+        float realW = realH * remoteW/remoteH;
 
-        int[] buf = new int[]{touch_event.getAction(), touch_event.getButtonState(), (int) touch_event.getX() * screenWidth / displayW, (int) touch_event.getY() * screenHeight / displayH};
+        int[] buf = new int[]{touch_event.getAction(), touch_event.getButtonState(), (int) (touch_event.getX() * realW / displayW), (int) (touch_event.getY() * realH / displayH)};
         final byte[] array = new byte[buf.length * 4]; // https://stackoverflow.com/questions/2183240/java-integer-to-byte-array
         for (int j = 0; j < buf.length; j++) {
             final int c = buf[j];

@@ -2,17 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:background="@color/white"
-    android:layout_width="320dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <LinearLayout
-        android:padding="10dp"
+        android:id="@+id/header"
+        android:padding="2dp"
         android:gravity="center_vertical"
         android:background="@color/white"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:text="七七协同"
+            android:text="scrcpy-lite"
+            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <Space
@@ -20,37 +22,64 @@
             android:layout_width="0dp"
             android:layout_height="0dp"/>
         <ImageView
+            android:id="@+id/iv_mini"
+            android:src="@drawable/minis"
+            android:layout_width="24dp"
+            android:layout_height="24dp"/>
+        <View
+            android:layout_width="18dp"
+            android:layout_height="0dp"/>
+        <ImageView
+            android:id="@+id/iv_close"
             android:src="@drawable/close"
-            android:layout_width="20dp"
-            android:layout_height="20dp"/>
+            android:layout_width="24dp"
+            android:layout_height="24dp"/>
     </LinearLayout>
     <FrameLayout
+        android:id="@+id/container"
+        android:minWidth="200dp"
+        android:minHeight="200dp"
         android:background="@color/black"
-        android:layout_width="match_parent"
-        android:layout_height="500dp">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <SurfaceView
+            android:id="@+id/surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:id="@+id/hint"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="链接中...30秒没反应估计就挂了\n\n注意手机提示配对的弹窗"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </FrameLayout>
     <LinearLayout
+        android:id="@+id/actionbar"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/action_back"
             android:gravity="center"
-            android:text="<"
-            android:textSize="28sp"
+            android:text="&lt;"
+            android:textSize="22sp"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/action_home"
             android:gravity="center"
             android:text="o"
-            android:textSize="28sp"
+            android:textSize="22sp"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/action_menu"
             android:gravity="center"
             android:text="="
-            android:textSize="28sp"
+            android:textSize="22sp"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
