@@ -18,7 +18,7 @@
 
             <TextView
                 android:padding="20dp"
-                android:text="要使用scrcpy-lite,要开启手机的无线调试\nadb命令:adb tcpip 5555"
+                android:text="要使用scrcpy-lite,要开启手机的无线调试\nadb命令:adb tcpip 5555\n\n横屏向下滚动啊↓"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -47,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="传输分辨率(不是手机分辨率，只影响清晰度随便选,同比例优先)"
+                android:text="传输分辨率(不是手机分辨率，只影响清晰度随便选,同比例优先,建议选小一点)"
                 android:textAppearance="@android:style/TextAppearance" />
 
             <Spinner

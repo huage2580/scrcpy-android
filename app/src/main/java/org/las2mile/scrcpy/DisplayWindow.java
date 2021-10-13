@@ -45,6 +45,8 @@ public class DisplayWindow extends FrameLayout {
     }
 
     private void init(){
+        setClipChildren(false);
+        setClipToPadding(false);
         LayoutInflater.from(getContext()).inflate(R.layout.window_display,this,true);
 
         container = findViewById(R.id.container);
@@ -172,7 +174,7 @@ public class DisplayWindow extends FrameLayout {
                 float rate = (float)w/h;
                 Log.d(TAG, "setRemote: "+w+","+h+" %->"+rate);
                 //高度屏幕的80%，然后宽度按比例
-                lp.height = (int)(this_dev_height * 0.82 - actionbar.getMeasuredHeight() - header.getMeasuredHeight());
+                lp.height = (int)(this_dev_height * 0.95 - actionbar.getMeasuredHeight() - header.getMeasuredHeight()-50);
                 lp.width = (int) (lp.height * rate);
                 container.setLayoutParams(lp);
 

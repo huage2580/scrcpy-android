@@ -58,10 +58,12 @@ public class FloatService extends Service {
         windowManager = (WindowManager)getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         lp = new WindowManager.LayoutParams();
         lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-        lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+        lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL|WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         lp.gravity = Gravity.TOP|Gravity.LEFT;
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.verticalMargin = 0;
+        lp.horizontalMargin = 0;
         windowManager.addView(displayWindow,lp);
 
 //        startCopy();

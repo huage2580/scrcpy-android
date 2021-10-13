@@ -15,10 +15,6 @@
 
 
     <string-array name="options_resolution_values">
-        <item>3200x1440</item>
-        <item>2400x1080</item>
-        <item>2340x1080</item>
-        <item>2248x1080</item>
         <item>1920x1080</item>
         <item>1600x720</item>
         <item>1280x720</item>

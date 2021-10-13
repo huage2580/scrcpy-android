@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
         <TextView
             android:text="scrcpy-lite"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <Space
@@ -25,19 +25,18 @@
             android:id="@+id/iv_mini"
             android:src="@drawable/minis"
             android:layout_width="24dp"
-            android:layout_height="24dp"/>
+            android:layout_height="18dp"/>
         <View
-            android:layout_width="18dp"
+            android:layout_width="8dp"
             android:layout_height="0dp"/>
         <ImageView
             android:id="@+id/iv_close"
             android:src="@drawable/close"
             android:layout_width="24dp"
-            android:layout_height="24dp"/>
+            android:layout_height="18dp"/>
     </LinearLayout>
     <FrameLayout
         android:id="@+id/container"
-        android:minWidth="200dp"
         android:minHeight="200dp"
         android:background="@color/black"
         android:layout_width="wrap_content"
@@ -57,13 +56,14 @@
     <LinearLayout
         android:id="@+id/actionbar"
         android:background="@color/white"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/action_back"
             android:gravity="center"
             android:text="&lt;"
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
@@ -71,7 +71,7 @@
             android:id="@+id/action_home"
             android:gravity="center"
             android:text="o"
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
@@ -79,7 +79,7 @@
             android:id="@+id/action_menu"
             android:gravity="center"
             android:text="="
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
