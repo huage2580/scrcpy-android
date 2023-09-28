@@ -107,7 +107,7 @@ public class ScrcpyHost implements Scrcpy.ServiceCallbacks{
     }
 
 
-    public void connect(Context context,String clientIp,int width, int height, int bitrate, Surface display){
+    public void connect(Context context,String clientIp,int width, int height, int bitrate, Surface display,boolean turnScreenOff){
         this.context = context;
         screenWidth = width;
         screenHeight = height;
@@ -120,7 +120,7 @@ public class ScrcpyHost implements Scrcpy.ServiceCallbacks{
 
         local_ip = wifiIpAddress();
         if (!serverAdr.isEmpty()) {
-            if (sendCommands.SendAdbCommands(context, fileBase64, serverAdr, local_ip, videoBitrate, Math.max(screenHeight, screenWidth)) == 0) {
+            if (sendCommands.SendAdbCommands(context, fileBase64, serverAdr, local_ip, videoBitrate, Math.max(screenHeight, screenWidth),turnScreenOff) == 0) {
                 start_screen_copy_magic();
             } else {
                 Toast.makeText(context, "Network OR ADB connection failed", Toast.LENGTH_SHORT).show();

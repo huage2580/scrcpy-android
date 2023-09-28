@@ -54,6 +54,7 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
     private static boolean result_of_Rotation = false;
     private static boolean serviceBound = false;
     private static boolean nav = false;
+    private static boolean tunScreenOff = false;
     SensorManager sensorManager;
     private SendCommands sendCommands;
     private int videoBitrate;
@@ -154,7 +155,7 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
             local_ip = wifiIpAddress();
             getAttributes();
             if (!serverAdr.isEmpty()) {
-                if (sendCommands.SendAdbCommands(context, fileBase64, serverAdr, local_ip, videoBitrate, Math.max(screenHeight, screenWidth)) == 0) {
+                if (sendCommands.SendAdbCommands(context, fileBase64, serverAdr, local_ip, videoBitrate, Math.max(screenHeight, screenWidth), tunScreenOff) == 0) {
                     start_screen_copy_magic();
                 } else {
                     Toast.makeText(context, "Network OR ADB connection failed", Toast.LENGTH_SHORT).show();
@@ -185,6 +186,7 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
         it.putExtra("w",screenWidth);
         it.putExtra("h",screenHeight);
         it.putExtra("b",videoBitrate);
+        it.putExtra("t",tunScreenOff);
         startService(it);
         finish();
     }
@@ -195,9 +197,11 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
         final EditText editTextServerHost = findViewById(R.id.editText_server_host);
         final Switch aSwitch0 = findViewById(R.id.switch0);
         final Switch aSwitch1 = findViewById(R.id.switch1);
+        final Switch aSwitch2 = findViewById(R.id.switch2);
         editTextServerHost.setText(context.getSharedPreferences(PREFERENCE_KEY, 0).getString("Server Address", ""));
         aSwitch0.setChecked(context.getSharedPreferences(PREFERENCE_KEY, 0).getBoolean("No Control", false));
         aSwitch1.setChecked(context.getSharedPreferences(PREFERENCE_KEY, 0).getBoolean("Nav Switch", false));
+        aSwitch2.setChecked(context.getSharedPreferences(PREFERENCE_KEY, 0).getBoolean("Turn Screen Off", false));
         setSpinner(R.array.options_resolution_values, R.id.spinner_video_resolution, PREFERENCE_SPINNER_RESOLUTION);
         setSpinner(R.array.options_bitrate_keys, R.id.spinner_video_bitrate, PREFERENCE_SPINNER_BITRATE);
         if(aSwitch0.isChecked()){
@@ -308,8 +312,11 @@ public class MainActivity extends Activity implements Scrcpy.ServiceCallbacks, S
         no_control = a_Switch0.isChecked();
         final Switch a_Switch1 = findViewById(R.id.switch1);
         nav = a_Switch1.isChecked();
+        final Switch a_Switch2 = findViewById(R.id.switch2);
+        tunScreenOff = a_Switch2.isChecked();
         context.getSharedPreferences(PREFERENCE_KEY, 0).edit().putBoolean("No Control", no_control).apply();
         context.getSharedPreferences(PREFERENCE_KEY, 0).edit().putBoolean("Nav Switch", nav).apply();
+        context.getSharedPreferences(PREFERENCE_KEY, 0).edit().putBoolean("Turn Screen Off", tunScreenOff).apply();
 
         final String[] videoResolutions = getResources().getStringArray(R.array.options_resolution_values)[videoResolutionSpinner.getSelectedItemPosition()].split("x");
             screenHeight = Integer.parseInt(videoResolutions[0]);

@@ -2,13 +2,18 @@ package org.las2mile.scrcpy;
 
 import android.graphics.Point;
 import android.os.Build;
+import android.os.IBinder;
 import android.os.RemoteException;
 import android.view.IRotationWatcher;
 import android.view.InputEvent;
 
 import org.las2mile.scrcpy.wrappers.ServiceManager;
+import org.las2mile.scrcpy.wrappers.SurfaceControl;
 
 public final class Device {
+
+    public static final int POWER_MODE_OFF = SurfaceControl.POWER_MODE_OFF;
+    public static final int POWER_MODE_NORMAL = SurfaceControl.POWER_MODE_NORMAL;
 
     private final ServiceManager serviceManager = new ServiceManager();
     private ScreenInfo screenInfo;
@@ -120,6 +125,17 @@ public final class Device {
 
     public interface RotationListener {
         void onRotationChanged(int rotation);
+    }
+
+    /**
+     * @param mode one of the {@code POWER_MODE_*} constants
+     */
+    public static boolean setScreenPowerMode(int mode) {
+        IBinder d = SurfaceControl.getBuiltInDisplay();
+        if (d == null) {
+            return false;
+        }
+        return SurfaceControl.setDisplayPowerMode(d, mode);
     }
 
 }

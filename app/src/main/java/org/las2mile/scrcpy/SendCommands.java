@@ -64,12 +64,12 @@ public class SendCommands {
     }
 
 
-    public int SendAdbCommands(Context context, final byte[] fileBase64, final String ip, String localip, int bitrate, int size) {
+    public int SendAdbCommands(Context context, final byte[] fileBase64, final String ip, String localip, int bitrate, int size, boolean turnScreenOff) {
         this.context = context;
         status = 1;
         final StringBuilder command = new StringBuilder();
         command.append(" CLASSPATH=/data/local/tmp/scrcpy-server.jar app_process / org.las2mile.scrcpy.Server ");
-        command.append(" /" + localip + " " + Long.toString(size) + " " + Long.toString(bitrate) + ";");
+        command.append(" /" + localip + " " + Long.toString(size) + " " + Long.toString(bitrate) + " " + turnScreenOff + ";");
 
         thread = new Thread(new Runnable() {
             @Override

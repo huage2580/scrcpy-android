@@ -16,7 +16,7 @@ public final class Server {
             ScreenEncoder screenEncoder = new ScreenEncoder(options.getBitRate());
 
             // asynchronous
-            startEventController(device, connection);
+            startEventController(device, connection, options);
 
             try {
                 // synchronous
@@ -27,15 +27,17 @@ public final class Server {
                 Ln.d("Screen streaming stopped");
 
             }
+        }finally {
+            Device.setScreenPowerMode(Device.POWER_MODE_NORMAL);
         }
     }
 
-    private static void startEventController(final Device device, final DroidConnection connection) {
+    private static void startEventController(final Device device, final DroidConnection connection, Options options) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    new EventController(device, connection).control();
+                    new EventController(device, connection).control(options);
                 } catch (IOException e) {
                     // this is expected on close
                     Ln.d("Event controller stopped");
@@ -69,8 +71,16 @@ public final class Server {
         if (args.length < 4) {
             return options;
         }
+
+        boolean turnScreenOff = Boolean.parseBoolean(args[3]);
+        options.setTurnScreenOff(turnScreenOff);
+
+        if (args.length < 5) {
+            return options;
+        }
+
         // use "adb forward" instead of "adb tunnel"? (so the server must listen)
-        boolean tunnelForward = Boolean.parseBoolean(args[3]);
+        boolean tunnelForward = Boolean.parseBoolean(args[4]);
         options.setTunnelForward(tunnelForward);
         return options;
     }
