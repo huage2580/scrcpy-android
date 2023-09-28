@@ -11,6 +11,7 @@
     <string name="back_button">v</string>
     <string name="switch0">No Control  (check this if remote device control is not required)</string>
     <string name="switch1">Nav Bar  (check this if remote device does not have on-screen nav bar)</string>
+    <string name="switch2">Turn Screen Off  (check this if remote device will be turn off screen on running)</string>
 
 
 

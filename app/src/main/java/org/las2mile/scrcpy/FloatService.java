@@ -22,6 +22,7 @@ public class FloatService extends Service {
 
     int w;
     int h;
+    boolean t;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -38,13 +39,14 @@ public class FloatService extends Service {
         h = intent.getIntExtra("h",1920);
         int b = intent.getIntExtra("b",1024000);
 
+        t = intent.getBooleanExtra("h",false);
         Log.d(TAG, "onStartCommand: "+w+","+h+"|"+b+" ->"+ip);
         displayWindow.setRemote(w,h);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                startCopy(ip,w,h,b);
+                startCopy(ip,w,h,b,t);
             }
         }).start();
 
@@ -70,7 +72,7 @@ public class FloatService extends Service {
 
     }
 
-    private void startCopy(String ip,int width,int height,int bitrate) {
+    private void startCopy(String ip,int width,int height,int bitrate,boolean turnScreenOff) {
         scrcpyHost = new ScrcpyHost();
         scrcpyHost.setConnectCallBack(new ScrcpyHost.ConnectCallBack() {
             @Override
@@ -79,7 +81,7 @@ public class FloatService extends Service {
                 displayWindow.hideHintTip();
             }
         });
-        scrcpyHost.connect(getApplicationContext(),ip,width,height,bitrate,displayWindow.getDisplaySurface());
+        scrcpyHost.connect(getApplicationContext(),ip,width,height,bitrate,displayWindow.getDisplaySurface(),turnScreenOff);
     }
 
     @Override

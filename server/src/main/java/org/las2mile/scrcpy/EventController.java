@@ -52,9 +52,13 @@ public class EventController {
         coords.setAxisValue(MotionEvent.AXIS_VSCROLL, vScroll);
     }
 
-    public void control() throws IOException {
+    public void control(Options options) throws IOException {
         // on start, turn screen on
-        turnScreenOn();
+        if(options.getTurnScreenOff()){
+            turnScreenOff();
+        }else {
+            turnScreenOn();
+        }
 
         while (true) {
             //           handleEvent();
@@ -124,6 +128,14 @@ public class EventController {
 
     private boolean turnScreenOn() {
         return device.isScreenOn() || injectKeycode(KeyEvent.KEYCODE_POWER);
+    }
+
+    /**
+     * Schedule a call to set power mode to off after a small delay.
+     */
+    private static void turnScreenOff() {
+            Ln.i("Forcing screen off");
+            Device.setScreenPowerMode(Device.POWER_MODE_OFF);
     }
 
 }
